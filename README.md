@@ -2,6 +2,6 @@
 <h1>Web-programming-labs</h1>
 <p>Laboratory works for the Web Programming course. Includes HTML, CSS and related technologies.</p>
 <div align="center">
-  <img src="Lab3/result_lab3.gif" alt="result"/>
+  <img src="Lab4/result_lab4.gif" alt="result"/>
 </div>
 </section>
