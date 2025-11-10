@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Транслітерація українського тексту</title>
+
+<script>
+// Таблиця транслітерації (офіційна Постанова КМУ №55, 2010 р.)
+const map = {
+    'А':'A','а':'a','Б':'B','б':'b','В':'V','в':'v','Г':'H','г':'h','Ґ':'G','ґ':'g',
+    'Д':'D','д':'d','Е':'E','е':'e','Є':'Ye','є':'ie','Ж':'Zh','ж':'zh','З':'Z','з':'z',
+    'И':'Y','и':'y','І':'I','і':'i','Ї':'Yi','ї':'i','Й':'Y','й':'i','К':'K','к':'k',
+    'Л':'L','л':'l','М':'M','м':'m','Н':'N','н':'n','О':'O','о':'o','П':'P','п':'p',
+    'Р':'R','р':'r','С':'S','с':'s','Т':'T','т':'t','У':'U','у':'u','Ф':'F','ф':'f',
+    'Х':'Kh','х':'kh','Ц':'Ts','ц':'ts','Ч':'Ch','ч':'ch','Ш':'Sh','ш':'sh','Щ':'Shch','щ':'shch',
+    'Ю':'Yu','ю':'iu','Я':'Ya','я':'ia','Ь':'','ь':'','ʼ':''
+};
+
+function transliterate() {
+    let text = document.getElementById("ukrText").value;
+    let result = "";
+
+    for (let ch of text) {
+        result += map[ch] !== undefined ? map[ch] : ch;
+    }
+
+    document.getElementById("latinText").value = result;
+}
+</script>
+</head>
+
+<body>
+<h2>Транслітерація українського тексту</h2>
+
+<form name="translitForm">
+    <label>Введіть український текст:</label><br>
+    <textarea id="ukrText" rows="5" cols="50" onkeyup="transliterate()"></textarea><br><br>
+
+    <label>Результат транслітерації:</label><br>
+    <textarea id="latinText" rows="5" cols="50" readonly></textarea>
+</form>
+
+<h2>Завдання 3: Створити новий елемент який буде містити копію всієї сторінки</h2>
+<button onclick="copyPage()">Копіювати сторінку в div</button>
+
+<script>
+function copyPage() {
+    const newDiv = document.createElement("div");
+    newDiv.id = "copyOfPage";
+    newDiv.style.border = "2px solid red";
+    newDiv.style.marginTop = "20px";
+    newDiv.style.padding = "10px";
+
+    newDiv.innerHTML = document.body.innerHTML;
+
+    document.body.appendChild(newDiv);
+}
+</script>
+</body>
+</html>
