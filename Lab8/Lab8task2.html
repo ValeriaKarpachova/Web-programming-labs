@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Маніпуляція з таблицею</title>
+
+<style>
+    table {
+        border-collapse: collapse;
+        margin: 20px;
+        font-family: Arial, sans-serif;
+    }
+    td {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+    .selected {
+        background: red;
+        color: white;
+    }
+</style>
+
+</head>
+<body>
+
+<table id="matrix">
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    const table = document.getElementById("matrix").querySelector("tbody");
+
+    for (let row = 1; row <= 5; row++) {
+        let tr = document.createElement("tr");
+        for (let col = 1; col <= 5; col++) {
+            let td = document.createElement("td");
+            td.textContent = `${col}:${row}`;
+
+            if (row === col) td.classList.add("selected");
+
+            td.addEventListener("click", function () {
+                this.style.border = "none";
+                this.style.background = "none";
+                this.textContent = "";
+                this.style.cursor = "default";
+            });
+
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Гонки</title>
+
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background: #111;
+        color: white;
+        text-align: center;
+    }
+
+    #road {
+        width: 100vw;
+        height: 260px;
+        background: #2e2e2e;
+        position: relative;
+        top: 150px;
+        border-top: 6px dashed white;
+        border-bottom: 6px dashed white;
+    }
+
+    .car {
+        width: 60px;
+        height: 35px;
+        background: red;
+        position: absolute;
+        left: 20px;
+        top: 110px;
+        border-radius: 6px;
+    }
+
+    .enemy {
+        width: 60px;
+        height: 35px;
+        background: yellow;
+        position: absolute;
+        border-radius: 6px;
+    }
+
+    #finish {
+        width: 30px;
+        height: 260px;
+        position: absolute;
+        background: repeating-linear-gradient(
+            to bottom,
+            white 0px,
+            white 20px,
+            red 20px,
+            red 40px
+        );
+        right: -50px;
+        display: none;
+    }
+
+    #score {
+        font-size: 22px;
+        top: 20px;
+        position: absolute;
+        left: 20px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="score">Очки: 0</div>
+<div id="road">
+    <div class="car" id="player"></div>
+    <div id="finish"></div>
+</div>
+
+<script>
+    const road = document.getElementById("road");
+    const player = document.getElementById("player");
+    const finish = document.getElementById("finish");
+    const scoreText = document.getElementById("score");
+
+    let score = 0;
+
+    let speed = 6;                
+    const speedIncrement = 0.8;   
+    const accelerationPerSecond = 0.06; 
+
+    let finishLineShown = false;
+
+    function createEnemy() {
+        let enemy = document.createElement("div");
+        enemy.classList.add("enemy");
+        
+        enemy.style.left = (window.innerWidth + Math.floor(Math.random() * 300) + 50) + "px";
+        enemy.style.top = Math.floor(Math.random() * (road.clientHeight - 40)) + "px";
+        road.appendChild(enemy);
+        return enemy;
+    }
+
+    let enemies = [createEnemy()];
+
+    document.addEventListener("keydown", (e) => {
+        let top = parseInt(getComputedStyle(player).top);
+        let left = parseInt(getComputedStyle(player).left);
+
+        if (e.key === "ArrowUp" && top > 5) {
+            player.style.top = top - 20 + "px";
+        }
+        if (e.key === "ArrowDown" && top < road.clientHeight - 45) {
+            player.style.top = top + 20 + "px";
+        }
+        if (e.key === "ArrowRight" && left < window.innerWidth - 80) {
+            player.style.left = left + 20 + "px";
+        }
+        if (e.key === "ArrowLeft" && left > 10) {
+            player.style.left = left - 20 + "px";
+        }
+    });
+
+    let lastAccTick = Date.now();
+    function applyAcceleration() {
+        const now = Date.now();
+        const dt = (now - lastAccTick) / 1000.0;
+        if (dt >= 0.2) { 
+            speed += accelerationPerSecond * dt;
+            lastAccTick = now;
+        }
+    }
+
+    function gameLoop() {
+        applyAcceleration();
+
+        enemies.forEach((enemy, index) => {
+            enemy.style.left = (parseFloat(enemy.style.left) - speed) + "px";
+
+            let p = player.getBoundingClientRect();
+            let e = enemy.getBoundingClientRect();
+
+            if (p.left < e.right && p.right > e.left && p.top < e.bottom && p.bottom > e.top) {
+                alert("Аварія! Твої очки: " + score);
+                location.reload();
+            }
+
+            if (parseFloat(enemy.style.left) < -150) {
+                enemy.remove();
+                enemies[index] = createEnemy();
+                score++;
+               
+                speed += speedIncrement;
+                scoreText.innerText = "Очки: " + score;
+            }
+        });
+
+        requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+</script>
+</body>
+</html>
